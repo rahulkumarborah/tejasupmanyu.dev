@@ -32,49 +32,52 @@ const BlogPostTemplate = ({ data, pageContext }: Props) => {
   const post = data.markdownRemark
   const siteTitle = data.site.siteMetadata.title
   const { previous, next } = pageContext
-
-  return (
-    <Layout location={window.location} title={siteTitle}>
-      <SEO
-        title={post.frontmatter.title}
-        description={post.frontmatter.description || post.excerpt}
-      />
-      <h1 sx={postHeaderStyles}>{post.frontmatter.title}</h1>
-      <Flex>
-        <span sx={postDateStyles}>{post.frontmatter.date} | </span>
-        <span sx={postTimeToReadStyles}>{post.timeToRead} minute read</span>
-      </Flex>
-      <div
-        dangerouslySetInnerHTML={{ __html: post.html }}
-        sx={postContentStyles}
-      />
-      <hr
-        style={{
-          marginBottom: rhythm(1),
-        }}
-      />
-      <div sx={{ marginBottom: 3 }}>
-        <MiniHeader title={siteTitle.toLowerCase()} />
-      </div>
-      <Bio />
-      <ul sx={navigationListStyle as CSSProperties}>
-        <li>
-          {previous && (
-            <Link to={previous.fields.slug} rel="prev">
-              ← {previous.frontmatter.title}
-            </Link>
-          )}
-        </li>
-        <li>
-          {next && (
-            <Link to={next.fields.slug} rel="next">
-              {next.frontmatter.title} →
-            </Link>
-          )}
-        </li>
-      </ul>
-    </Layout>
-  )
+  if (typeof window !== `undefined`) {
+    return (
+      <Layout location={window.location} title={siteTitle}>
+        <SEO
+          title={post.frontmatter.title}
+          description={post.frontmatter.description || post.excerpt}
+        />
+        <h1 sx={postHeaderStyles}>{post.frontmatter.title}</h1>
+        <Flex>
+          <span sx={postDateStyles}>{post.frontmatter.date} | </span>
+          <span sx={postTimeToReadStyles}>{post.timeToRead} minute read</span>
+        </Flex>
+        <div
+          dangerouslySetInnerHTML={{ __html: post.html }}
+          sx={postContentStyles}
+        />
+        <hr
+          style={{
+            marginBottom: rhythm(1),
+          }}
+        />
+        <div sx={{ marginBottom: 3 }}>
+          <MiniHeader title={siteTitle.toLowerCase()} />
+        </div>
+        <Bio />
+        <ul sx={navigationListStyle as CSSProperties}>
+          <li>
+            {previous && (
+              <Link to={previous.fields.slug} rel="prev">
+                ← {previous.frontmatter.title}
+              </Link>
+            )}
+          </li>
+          <li>
+            {next && (
+              <Link to={next.fields.slug} rel="next">
+                {next.frontmatter.title} →
+              </Link>
+            )}
+          </li>
+        </ul>
+      </Layout>
+    )
+  } else {
+    return null
+  }
 }
 
 export default BlogPostTemplate
