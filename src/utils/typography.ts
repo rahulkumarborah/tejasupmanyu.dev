@@ -1,6 +1,19 @@
 import Typography from "typography"
 import Wordpress2016 from "typography-theme-wordpress-2016"
 
+Wordpress2016.googleFonts = [
+  {
+    name: "Roboto",
+    styles: ["700"],
+  },
+  {
+    name: "Merriweather",
+    styles: ["400", "400i", "700", "700i", "900", "900i"],
+  },
+]
+
+Wordpress2016.headerFontFamily = ["Roboto", "Georgia", "serif"]
+
 Wordpress2016.overrideThemeStyles = () => {
   return {
     "a.gatsby-resp-image-link": {
@@ -9,7 +22,7 @@ Wordpress2016.overrideThemeStyles = () => {
   }
 }
 
-delete Wordpress2016.googleFonts
+// delete Wordpress2016.googleFonts
 
 const typography = new Typography(Wordpress2016)
 
