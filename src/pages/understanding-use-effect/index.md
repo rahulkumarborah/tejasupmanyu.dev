@@ -1,10 +1,10 @@
 ---
-title: A Quick Guide to useEffect Hook
+title: Understanding useEffect Hook
 date: "2020-01-11"
 description: This blog post tries to deepen understanding around React rendering process and answers most commonly faced questions around useEffect hook.
 ---
 
-When React Hooks were released at React Conf, 2018, they took the React community all across the globe by a storm. Finally there was a refreshing and fundamental change in the way everyone thinks about and writes React code. One of the attracting (yet mysterious?) aspect of using hooks was the brevity they imparted to projects. As everyone was pumped up about giving these all new hooks a spin, so was I. Sure, `useState`, `useMemo` and `useContext` look neat and are fairly simple to understand. But there in plain sight is probably one of the most critical hooks - `useEffect`.
+When React Hooks were released at React Conf, 2018, they took the React community all across the globe by a storm. Finally there was a refreshing and fundamental change in the way everyone thinks about and writes React code. One of the attractive (yet mysterious?) aspect of using hooks was the brevity they imparted to projects. As everyone was pumped up about giving these all new hooks a spin, so was I. Sure, `useState`, `useMemo` and `useContext` look neat and are fairly simple to understand. But there in plain sight is probably one of the most critical hooks - [useEffect](https://reactjs.org/docs/hooks-effect.html)
 
 `useEffect` is supposed to be this all-in-one replacement for a bunch of old lifecycle methods like `componentDidMount`, `componentDidUpdate` to name a few and hence getting the right understanding of `useEffect` hook and hooks in general is paramount to writing consistent, clean and bug-free data-driven React applications.
 
@@ -16,9 +16,11 @@ Here are some of the questions you might be having after employing the `useEffec
 - How to stop infinite refetching loop?
 - Should functions be specified as dependencies to `useEffect`?
 
+_In case you are looking for answers to these questions real quick, check out the TLDR; section at the end._
+
 ### Understanding Rendering
 
-Functional components differ from traditional class components in a prominent way and that is the way how they close around state and props. In more simplified terms, each 'render' owns it separate set of state and props. Now that might not be that simple to understand. Let's go with an counter example -
+Functional components differ from traditional class components in a prominent way and that is the way they close around state and props. In more simplified terms, each 'render' owns a separate set of state and props. Now that might not be that simple to understand. Let's go with a simple example -
 
 ```jsx
 function Counter() {
@@ -33,7 +35,7 @@ function Counter() {
 }
 ```
 
-Every time user clicks on the button, `setCount` updates the state which triggers a re-render with the new value. Initially, count is 0 and as the first click happens on button state updates via `setCount`, calling the `Counter` function again with a new value of count which would be 1. For the second render, `Counter` sees its individual value for `count`. So `count` is constant for each render and It's value is isolated between different renders. This is not only true for state values but also for props, events handlers, functions and pretty much everything. Here is another example to clarify this -
+Every time user clicks on the button, `setCount` updates the state which triggers a re-render with the new value. Initially, count is 0 and as the first click happens on button state updates via `setCount`, calling the `Counter` function again with a new value of count which would be 1. For the second render, `Counter` sees its individual value for `count`. So `count` is constant for each render and Its value is isolated between different renders. This is not only true for state values but also for props, events handlers, functions and pretty much everything. Here is another example to clarify this -
 
 ```jsx
 function Greeting() {
@@ -55,11 +57,13 @@ function Greeting() {
 }
 ```
 
-Okay, let's say we type 'Dan' in the input and click greet button, then we enter 'Sunil' and click greet button before 5 seconds. What message will the greeting alert show? will it be 'Hey Dan' or 'Hey Sunil'? latter one right? Here's the [sandbox](https://codesandbox.io/s/awesome-goodall-9103f) for you to give it a spin and see the difference between class components and functional components.
+Okay, let's say we type 'Dan' in the input and click greet button, then we enter 'Sunil' and click greet button before 5 seconds. What message will the greeting alert show? will it be 'Hey Dan' or 'Hey Sunil'? latter one right? No. Here's the [sandbox](https://codesandbox.io/s/awesome-goodall-9103f) for you to give it a spin and see the difference between class components and functional components.
 
 So why is it so? We've discussed this above. Each render owns the state for functional components which is not true for class components. Next time someone asks you difference between class and functional components, do remember this.
 
-### Each render owns Its state, props, effects ....everything.
+though, you should totally follow [Dan](https://twitter.com/dan_abramov) and [Sunil](https://twitter.com/threepointone) on twitter!
+
+### Each Render Wwns Its State, Props, Effects ....Everything.
 
 As we saw above, each render owns its state, props and pretty much everything including `effects`.
 
@@ -82,9 +86,9 @@ function Greeting() {
 
 In this example above, as the user types a name in the input field, `setName` gets triggered and sets the new name in state, leading to a re-render. How does the effect know about latest value of `name`? Is it some sort of data-binding? Nada. We learnt earlier that count is different and isolated for each render. Functions, event handlers and even effects can 'see' values from the render they belong to. So the correct mental model to paint is - It is not only a changing `name` inside an unchanging _effect_. It is the _effect_ which also is different for each render.
 
-So let's set this out straight. _Every_ function inside a component render sees the state, props particular to that render only.
+Let's set this out straight. _Every_ function inside a component render sees the state, props particular to that render only.
 
-So the eventual question in your mind would be - how can I access state and prop from next or previous renders, just like _class components_. Well it would be going against the flow, but is definitely possible using refs. Be aware that when you want to read the future props or state from a function in a past render, you’re intentionally going against the flow. It’s not wrong (and in some cases necessary) but it might look less “clean” to break out and that;s intended to highlight which code is fragile and depends on timing. In classes, it’s less obvious when this happens, which can lead to strange bugs in some cases.
+So, the eventual question in your mind would be - how can I access state and prop from next or previous renders, just like _class components_. Well it would be going against the flow, but is definitely possible using refs. Be aware that when you want to read the future props or state from a function in a past render, you’re intentionally going against the flow. It’s not wrong (and in some cases necessary) but it might look less “clean” to break out and that's intended to highlight which code is fragile and depends on timing. In classes, it’s less obvious when this happens, which can lead to strange bugs in some cases.
 
 ```jsx
 function Greeting() {
@@ -93,7 +97,7 @@ function Greeting() {
 
   useEffect(() => {
     // Set the mutable latest value
-    latestCount.current = count
+    latestCount.current = name
     setTimeout(() => {
       // Read the mutable latest value
       console.log(`You entered ${latestName}`)
@@ -109,9 +113,9 @@ function Greeting() {
 }
 ```
 
-This code will always console.log the latest value of name, behaving like classes. So it might feel a bit strange but React mutates `this.state` the same way in classes.
+This code will always log the latest value of name, behaving like classes. So it might feel a bit strange but React mutates `this.state` the same way in classes.
 
-### What about 'cleanup' function?
+### What About 'cleanup' Function?
 
 Going throught the [docs](https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup), you will find mentions of a certain cleanup function. Cleanup function does exactly as it says - cleans up an effect. Where will it be required you might ask, well any cleanup function makes sense in cases where you have to unsuscribe from subscriptions or say removeEventlisteners.
 
@@ -130,7 +134,9 @@ if `props.id` is 1 on first render and 2 on second. How will this effect work ?
 
 - subscribe with id = 1
 - unsubscribe with id = 1
+
   then
+
 - subscribe with id = 2
 - unsubscribe with id = 2
 
@@ -142,7 +148,7 @@ You must be a little uncomfortable with this. How can cleanup function still see
 
 So no 'new' props and state are available to the cleanup function but the ones available to other functions and effects in that render and hence cleanups don't require to be run right before next render, they can run after the next render as well.
 
-### Telling React when to run an Effect
+### Telling React When to Run an Effect
 
 This is pretty much on the lines of how React works, It learned the lesson that instead of changing the whole DOM on every change, only update the parts that actually need updation. There are times when running an effect is not neccessary, so how do you instruct React on whether to run this effect or not?
 
@@ -151,7 +157,7 @@ function Greeting({ name }) {
   const [counter, setCounter] = useState(0)
 
   useEffect(() => {
-    document.title = "Hello, " + name
+    document.title = `Hello, ${name}`
   })
 
   return (
@@ -163,11 +169,11 @@ function Greeting({ name }) {
 }
 ```
 
-In this example, when you click the increment button, the state updates and the effect fires, unnecessarily even though the name it uses hasn't. So probably React should get a diff between `old effect` and `new effect` to see if anything has changed? No,that can't happen as well because React can't tell the difference in two functions without executing them, which defeats the purpose, right?
+In this example, when you click the increment button, the state updates and the effect fires, unnecessarily even though the name it uses hasn't. So probably React should get a diff between `old effect` and `new effect` to see if anything has changed? No,that can't happen as well because React can't magically tell the difference in two functions without executing them, which defeats the purpose, right?
 
 To get out of this problem, `useEffect` hook has a provision for providing a second argument – An array of dependencies. Array of dependencies or 'deps' signify what are the dependencies for that effect. If the dependencies are same between renders, React understands that the effect can be skipped.
 
-### Being honest about effect dependencies
+### Being Honest About Effect Dependencies
 
 Dependency array or 'deps' are critical to bug-free usage of `useEffect`. Giving incomplete or wrong dependencies can certainly lead to bugs. The statement to internalise here is -
 
@@ -178,9 +184,12 @@ This is of great relevance and we as developers often lie to React about depende
 Being honest about dependencies is quite simple if you follow these two conventions -
 
 - Include all the values inside the component that are used inside the effect.
-- OR, Change the effect code, so that you don't need to specify dependency anymore.
 
-Our mental model of hooks generated by our usage of classes sways us against considering functions as part of data flow and hence a dependency to an effect, which is not true. In reality, Classes obstruct us from considering functions as part of the data flow and that can be understood better by this example -
+  OR
+
+- Change the effect code, so that you don't need to specify dependency anymore.
+
+The mental model of hooks generated by our usage of classes sways us against considering functions as part of data flow and hence a dependency to an effect, which is not true. In reality, Classes obstruct us from considering functions as part of the data flow and that can be understood better by this example -
 
 ```jsx
 class Parent extends Component {
@@ -209,7 +218,7 @@ class Child extends Component {
 }
 ```
 
-now if we want to refetch in child based on changes in query, we cannot just compare fetchData between renders because it is a class property and will always be the same, which will land us in infinite refetching condition.
+now if we want to refetch in child based on changes in query, we cannot just compare fetchData between renders because it is a class property and will always be the same, which will land us in infinite refetching condition. So we have to take another step unncessarily - passing `query` as prop to Child and comparing value of `query` in `componentDidUpdate` between renders.
 
 ```jsx
 class Child extends Component {
@@ -220,7 +229,7 @@ class Child extends Component {
     this.props.fetchData()
   }
   componentDidUpdate(prevProps) {
-    // 🔴 This condition will never be true as fetchData is a class property and will always remain same
+    //  This condition will never be true as fetchData is a class property and will always remain same
     if (this.props.fetchData !== prevProps.fetchData) {
       this.props.fetchData()
     }
@@ -246,13 +255,13 @@ function Child({ fetchData }) {
 
   useEffect(() => {
     fetchData().then(setData)
-  }, [fetchData]) // ✅ Effect deps are OK
+  }, [fetchData]) // Effect deps are OK
 
   // ...
 }
 ```
 
-Though there is one minor catch here, which you must understand. Hadn't we wrapped `fetchData` in a `useCallback` with query as dependency, fetchData would change on every render, which when supplied as a dependency to `useEffect` in child component would needlessly trigger the effect over and over again. Not ideal, huh.
+✅ Though there is one minor catch here, which you must understand. Hadn't we wrapped `fetchData` in a `useCallback` with query as dependency, fetchData would change on every render, which when supplied as a dependency to `useEffect` in child component would needlessly trigger the effect over and over again. Not ideal, huh.
 
 **`useCallback` allows functions to fully participate in the data flow. Whenever function inputs or dependencies change, the output function changes, else it remains the same.**
 
@@ -285,6 +294,6 @@ Data fetching in `useEffect` is a routine use case and while `useEffect` is not 
 
 Yes, absolutely. If your functions use state/prop do wrap them in a `useCallback` as we saw above. Functions relying on state/props should be part of data flow using hooks, otherwise you can just hoist them outside your component.
 
-### Closing notes
+### Closing Notes
 
 This post is an attempt to make `useEffect` more understandable and to document my understanding of `useEffect`. Most of the examples and inspiration come from the exhaustive and [Complete guide on useEffect](https://overreacted.io/a-complete-guide-to-useeffect/) by [Dan Abramov](https://twitter.com/dan_abramov), which you should definitely go through. I thank him for teaching me and to you for taking time to read this post.
