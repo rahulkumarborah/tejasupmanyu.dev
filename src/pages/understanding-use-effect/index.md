@@ -63,7 +63,7 @@ So why is it so? We've discussed this above. Each render owns the state for func
 
 though, you should totally follow [Dan](https://twitter.com/dan_abramov) and [Sunil](https://twitter.com/threepointone) on twitter!
 
-### Each Render Wwns Its State, Props, Effects ....Everything.
+### Each Render Owns Its State, Props, Effects ....Everything.
 
 As we saw above, each render owns its state, props and pretty much everything including `effects`.
 
