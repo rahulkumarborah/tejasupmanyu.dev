@@ -155,6 +155,7 @@ This is pretty much on the lines of how React works, It learned the lesson that 
 ```jsx
 function Greeting({ name }) {
   const [counter, setCounter] = useState(0)
+  const [name, setName] = useState("Tejas")
 
   useEffect(() => {
     document.title = `Hello, ${name}`
@@ -169,7 +170,7 @@ function Greeting({ name }) {
 }
 ```
 
-In this example, when you click the increment button, the state updates and the effect fires, unnecessarily even though the name it uses hasn't. So probably React should get a diff between `old effect` and `new effect` to see if anything has changed? No,that can't happen as well because React can't magically tell the difference in two functions without executing them, which defeats the purpose, right?
+In this example, when you click the increment button, the state updates and the effect fires, unnecessarily even though the name it uses hasn't changed. So probably React should get a diff between `old effect` and `new effect` to see if anything has changed? No,that can't happen as well because React can't magically tell the difference in two functions without executing them, which defeats the purpose, right?
 
 To get out of this problem, `useEffect` hook has a provision for providing a second argument – An array of dependencies. Array of dependencies or 'deps' signify what are the dependencies for that effect. If the dependencies are same between renders, React understands that the effect can be skipped.
 

@@ -1,12 +1,9 @@
 {
-  "name": "gatsby-starter-blog",
+  "name": "tejasupmanyu.dev",
   "private": true,
-  "description": "A starter for a blog powered by Gatsby and Markdown",
-  "version": "0.1.0",
-  "author": "Kyle Mathews <mathews.kyle@gmail.com>",
-  "bugs": {
-    "url": "https://github.com/gatsbyjs/gatsby/issues"
-  },
+  "description": "Personal blog by Tejas Upmanyu, forked from Gatsby starter template.",
+  "version": "0.2.0",
+  "author": "Tejas Upmanyu <tejasupmanyu@gmail.com>",
   "dependencies": {
     "@emotion/core": "^10.0.27",
     "@mdx-js/react": "^1.5.3",
@@ -47,16 +44,9 @@
     "prettier": "^1.19.1",
     "typescript": "^3.7.4"
   },
-  "homepage": "https://github.com/gatsbyjs/gatsby-starter-blog#readme",
-  "keywords": [
-    "gatsby"
-  ],
+  "homepage": "https://tejasupmanyu.dev",
   "license": "MIT",
   "main": "n/a",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/gatsbyjs/gatsby-starter-blog.git"
-  },
   "scripts": {
     "build": "gatsby build",
     "dev": "gatsby develop",
