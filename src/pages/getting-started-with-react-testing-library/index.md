@@ -10,7 +10,7 @@ In this blog post, I'd like to share my learnings around [React Testing Library]
 
 ### 😓 Writing Maintainable Tests is Hard
 
-Well, the problem is that writing tests that go the distance and are maintainable over the time as project changes is hard. To achieve maintainability with test cases, you want to avoid including implementation details of components because that will obviously face rounds of refactoring over time. Tests are meant to give us confidence, and getting caught up in updating code and tests side by side every time you make a small refactor can be exhausting.
+Well, the problem is that writing tests that go the distance and are maintainable over time as project changes is hard. To achieve maintainability with test cases, you want to avoid including implementation details of components because that will obviously face rounds of refactoring over time. Tests are meant to give us confidence, and getting caught up in updating code and tests side by side every time you make a small refactor can be exhausting.
 
 ### 🐐 Enter - React Testing Library
 
@@ -18,7 +18,7 @@ React testing library by Kent C Dodds aims to solve these issues with writing ma
 
 > The more your tests resemble the way your software is used, the more confidence they can give you.
 
-So rather than dealing with instances of rendered React components, and checking if state is getting updated properly or props being passed are okay, which we can do with Enzyme by the way, Instead our tests will work with actual DOM nodes. The utilities this library provides facilitate querying the DOM in the same way the user would. Finding for elements by their label text (just like a user would), finding links and buttons from their text (like a user would).
+So rather than dealing with instances of rendered React components, and checking if state is getting updated properly or props being passed are okay, which we can do with Enzyme by the way, instead our tests will work with actual DOM nodes. The utilities this library provides facilitate querying the DOM in the same way the user would. Finding elements by their label text (just like a user would), finding links and buttons from their text (like a user would).
 
 You can also find elements in DOM by giving them a `data-testid` prop as an “escape hatch” for elements where the text content and label do not make sense or is not practical.
 
@@ -81,9 +81,9 @@ test("if component renders without crashing", () => {
 })
 ```
 
-Here, in first line we render the component to be tested which is the `Select` component using `render` function from `react-testing-library` we imported earlier. We pass the mock options we have defined earlier as props to `Select`. `render` returns an object with a whole bunch of functions and objects, which can be used to query the rendered component. In this case, we'll destructure to get `getByText` which queries the DOM by text value, and `getbyAltText` which queries the DOM for elements with provided alt text attribute. We'll now employ `getByText` to get the control element of the `Select` which has a default placeholder text of "Select" if nothing is selected. Querying for the default "Select" string should return us the control element. Next up, we'll use the `getByAltText` to get the indicator img element which has an alt text based on the state of `Select` component. since initially, the dropdown is closed it should be `dropdown indicator down`. Finally we assert that both the `controlElement` and `dropdownIndicator` as queried above are in the document, using expect function provided by Jest. That's it, that's is sufficient to test if this component renders correctly.
+Here, in first line we render the component to be tested which is the `Select` component using `render` function from `react-testing-library` we imported earlier. We pass the mock options we have defined earlier as props to `Select`. `render` returns an object with a whole bunch of functions and objects, which can be used to query the rendered component. In this case, we'll destructure to get `getByText` which queries the DOM by text value, and `getbyAltText` which queries the DOM for elements with provided alt text attribute. We'll now employ `getByText` to get the control element of the `Select` which has a default placeholder text of "Select" if nothing is selected. Querying for the default "Select" string should return us the control element. Next up, we'll use the `getByAltText` to get the indicator img element which has an alt text based on the state of `Select` component. since initially, the dropdown is closed it should be `dropdown indicator down`. Finally we assert that both the `controlElement` and `dropdownIndicator` as queried above are in the document, using expect function provided by Jest. That's sufficient to test if this component renders correctly.
 
-You can run the tests, using `yarn test` or `npm run test` depending on your usage and If all is right, your tests should pass ✅.
+You can run the tests, using `yarn test` or `npm run test` depending on your usage and if all is right, your tests should pass ✅.
 In case of failure Jest is nice enough to highlight quite clearly what went wrong, you can use this to debug your tests.
 
 #### Test 2: If menu shows up on clicking the select control.
@@ -127,7 +127,7 @@ test("if our options are rendered correctly", () => {
 
 In this 3rd one, we are going to test if our options are getting rendered correctly in the menu list. For that, we'll begin by rendering the `Select` component using same old `render` method and pass it options as props. We'll destructure `getByRole` and `getAllByRole` from the object returned by render. We'll get our control element by querying for role "button" using `getByRole` query function. Then, to show up the menu list, we'll fire a click event using `fireEvent` as done in the previous test. Quite easy till here. Then we'll use `getAllByRole` to get all elements with role of `option` which we've given to our option elements in code. This will return an array of elements having role as `option`. Finally, we'll assert if the length of the array is same as the length of the options passed using `expect` and `toHaveLength`.
 
-You know how to run tests by now, so go ahead and run'em. If everything is alright, all tests should pass and in case of failure, you'll get nice error messages which will help you debug your tests.
+You know how to run tests by now, so go ahead and run 'em. If everything is alright, all tests should pass and in case of failure, you'll get nice error messages which will help you debug your tests.
 
 #### Test 4: If the rendered options are correct.
 
