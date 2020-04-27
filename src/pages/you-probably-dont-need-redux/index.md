@@ -1,5 +1,5 @@
 ---
-title: You Probably Don’t Need Redux
+title: You Probably Don’t Need Redux  🔮
 date: "2020-04-25"
 description: In this blog post, I share my learnings and observations around Redux and why you probably don't need it.
 ---
@@ -14,7 +14,7 @@ React’s [Context API](https://reactjs.org/docs/context.html) has been around f
 
 Yes, It is meant to be a global data store but the term `global data store` is often translated as a state to hold every state, value, data and signal. That is wrong, and It is a slippery slope, goes 0 to 100 quite fast and soon enough you find yourself working on an application with absolutely messed up global state, where when a new guy onboards he doesn’t know which reducer to use data from because there are multiple copies or derived states.
 
-People often get used to the fact that they’ve to make changes in 3 files whenever something changes, why??? That’s a pain, we’ve got accustomed to and as the size of application or scope increases this only gets worse. Every change becomes incrementally difficult because you don’t want to break existing things and you end up abusing redux further.
+People often get used to the fact that they’ve to make changes in 3 files whenever something changes, why??? That’s a pain, we’ve got accustomed to and as the size of application or scope increases this only gets worse. Every change becomes incrementally difficult because you don’t want to break existing things and you end up abusing Redux further.
 
 When that stage comes, we often like to blame React and Redux for the meaty boilerplate it asks of you to write.
 
@@ -32,7 +32,7 @@ React gives you _local state_. Let’s not forget it and use is as much as possi
 
 ## Redux for state 📦
 
-Right, that’s what Redux is for - maintaining your global state, but pay close attention and you will find values that are required just by a single component but you thought that someone might need them in future in some other component _so why not put in the effort to put this local data in Redux_. That’s where we are often wrong. Because the chance of a future guy requiring the same data in some other component is really low and even if that happens, chances of duplication of data and derived redux states are good. Over time, this practice of putting values unnecessarily in Redux store becomes perfunctory, and you eventually land in a big stinking mess of reducers and states where nobody wants to touch anything and they’d rather create a new reducer in fear of causing regressions in god knows which component. I know proper code reviews and processes in place will not let the situation get that dire, that fast but definitely the morning will come, when the realisation strikes and all you are left with is an insurmountable tech debt of fixing state management in an existing code base with minimum regressions.
+Right, that’s what Redux is for - maintaining your global state, but pay close attention and you will find values that are required just by a single component but you thought that someone might need them in future in some other component _so why not put in the effort to put this local data in Redux_. That’s where we are often wrong. Because the chance of a future guy requiring the same data in some other component is really low and even if that happens, chances of duplication of data and derived Redux states are good. Over time, this practice of putting values unnecessarily in Redux store becomes perfunctory, and you eventually land in a big stinking mess of reducers and states where nobody wants to touch anything and they’d rather create a new reducer in fear of causing regressions in god knows which component. I know proper code reviews and processes in place will not let the situation get that dire, that fast but definitely the morning will come, when the realisation strikes and all you are left with is an insurmountable tech debt of fixing state management in an existing code base with minimum regressions.
 
 So heed my words - whenever you are thinking of going the Redux way with a state, give a good thought to it. Is that data really of ‘global’ use, are there other (non-immediate child) components which require that data? If the answer is yes, Redux-land is the home for that data.
 
@@ -48,6 +48,10 @@ I am all for clean and readable code, and readability principles demand that one
 
 And I am not asking you to put your fetch calls inside your components just as they are, there are a lot of great abstractions out there, which are seemingly easy to use and do not take away the brevity and readability of your code.
 
+> _*Since Redux is a global store, we don't have to fetch data again…*_
+
+Some of you might be having this as an argument. Well, most of us make API calls to fill up our components whenever the components 'mounts' and that data comes via Redux. So until you have proper data validation mechanisms to know that your Redux store needs to be repopulated with fresh data from an API call, you are going to make that API call on every mount, so how are we saving anything there? And if what you really want 'caching' so that you can save on your API calls, why not go with solutions built for that, instead of trying to mould Redux into your cache. 🤔
+
 There are a lot of brilliant libraries out there to help you tidy up your data fetching. [SWR](https://github.com/zeit/swr) by the good folks at Zeit is one amazing utility to get started with. If you want to take it a notch up, you can consider going with [react-query](https://github.com/tannerlinsley/react-query) by [Tanner Linsley](https://twitter.com/tannerlinsley) both of these are mostly based around render time data fetching and provide great ways to optimise on your data fetching operations.
 
 Sometimes you might need event based data fetching - fetching data when some particular ’_*event*_’ happens. For such cases, I authored a utility called [react-str](https://github.com/tejasupmanyu/str), which I’ve been used a lot by now and It makes things quite nice and concise.
@@ -56,7 +60,7 @@ I’ve been walking this path of avoiding Redux for data fetching for some time 
 
 ## Redux for signalling 👀
 
-At times in our applications, we need to _*do*_ something based on occurrence of some event somewhere else in your code. For example - I want to change text inside a header component whenever user scrolls beyond a certain limit in another component. Usually, how we solve this is maintain a redux state which is a boolean keeping track if the user scrolled to that limit or not and we watch for that state value in our header, when it changes we change our header text. Sounds familiar? Or suppose you have a general confirmation modal which you might want to show at multiple places in your application, you can either call it at these many places or just put it on the parent component, toggling Its visibility somehow. Again you’ll be maintaining a set of actions and a reducer to maintain modal visibility state, right? These cases might not be that frequent but these are not rare as well.
+At times in our applications, we need to _*do*_ something based on occurrence of some event somewhere else in your code. For example - I want to change text inside a header component whenever user scrolls beyond a certain limit in another component. Usually, how we solve this is maintain a Redux state which is a boolean keeping track if the user scrolled to that limit or not and we watch for that state value in our header, when it changes we change our header text. Sounds familiar? Or suppose you have a general confirmation modal which you might want to show at multiple places in your application, you can either call it at these many places or just put it on the parent component, toggling Its visibility somehow. Again you’ll be maintaining a set of actions and a reducer to maintain modal visibility state, right? These cases might not be that frequent but these are not rare as well.
 
 To reiterate, signalling flags or values like the one above are rarely ‘global’ and are required to be received by one or a few components at most. So why do we put these values in our so called _*global store*_ ?
 
@@ -70,7 +74,7 @@ In most cases, teams opt for Redux because some senior members on the team think
 
 Redux is just another library, albeit a great one. Use it when you identity the need for it, not just because it is such a major name in the React ecosystem.
 
-And if you are influenced and love the pattern redux enforces, you can enforce it without Redux also, the pattern is called `flux` and you can read more about it [here](http://fluxxor.com/what-is-flux.html).
+And if you are influenced and love the pattern Redux enforces, you can enforce it without Redux also, the pattern is called `flux` and you can read more about it [here](http://fluxxor.com/what-is-flux.html).
 
 I think it is right time to share the unheard wisdom - _*Nobody knows the future*_, Not even the seniors - all the time. Future depends on present (genius!) and the decisions we make today reflect tomorrow. It is okay to ask why, before adding anything to your bundle. Remember as Front-end engineers, user is the **King** and every avoidable package you use adds to that bundle size, making it heavier and ultimately slower to load. 🐌
 
@@ -84,4 +88,4 @@ I hope I gave some points worth your time on why you probably don’t need Redux
 
 If the title seems familiar, It is derived (more unsolicited puns) from - [You probably don’t need derived state](https://reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html) - this excellent official React blog post by [Brian Vaughn](https://twitter.com/brian_d_vaughn), if you haven’t read it, do check it out!
 
-Through this writing, I’d like to thank [Rishabh Gupta](https://twitter.com/rshb_g) 💐 for the ideas and learnings shared here would not have been complete without his continued able guidance and help.
+Through this writing, I’d like to thank [Rishabh Gupta](https://twitter.com/rshb_g) 💐 for the ideas and learnings shared here would not have been complete without his able guidance and help.

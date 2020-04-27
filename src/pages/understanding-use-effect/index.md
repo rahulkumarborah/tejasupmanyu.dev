@@ -1,5 +1,5 @@
 ---
-title: Understanding useEffect Hook
+title: Understanding useEffect Hook  🤔
 date: "2020-01-11"
 description: This blog post tries to deepen understanding around React rendering process and answers most commonly faced questions around useEffect hook.
 ---
